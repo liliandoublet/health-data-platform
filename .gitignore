@@ -7,3 +7,4 @@ target/
 dbt_packages/
 logs/
 data/raw/
+1-dbt/a-pipeline-analytique-sante/health_analytics/dev.duckdb

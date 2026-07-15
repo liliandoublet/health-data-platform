@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: stg_patients
+    description: "Un patient synthétique par ligne. Colonnes directement identifiantes écartées dès le staging."
+    columns:
+      - name: patient_id
+        description: "Identifiant technique du patient (UUID Synthea)."
+        tests: [unique, not_null]
+      - name: birth_date
+        tests: [not_null]
+      - name: gender
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['M', 'F']
+
+  - name: stg_encounters
+    description: "Une consultation ou hospitalisation par ligne."
+    columns:
+      - name: encounter_id
+        tests: [unique, not_null]
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_patients')
+                field: patient_id
+      - name: encounter_class
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ambulatory', 'emergency', 'inpatient', 'outpatient', 'wellness', 'urgentcare', 'hospice', 'snf', 'home', 'virtual']
+
+  - name: stg_conditions
+    description: "Un diagnostic posé par ligne. Pas de clé primaire naturelle."
+    columns:
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_patients')
+                field: patient_id
+      - name: condition_code
+        tests: [not_null]
+
+  - name: stg_medications
+    columns:
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_patients')
+                field: patient_id
+
+  - name: stg_organizations
+    columns:
+      - name: organization_id
+        tests: [unique, not_null]

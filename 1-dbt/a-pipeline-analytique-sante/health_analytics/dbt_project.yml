@@ -25,3 +25,11 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
+models:
+  health_analytics:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: dim_patients
+    description: "Dimension patient. Un patient par ligne, enrichi de sa charge pathologique."
+    columns:
+      - name: patient_id
+        tests: [unique, not_null]
+      - name: age_band
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['00-17', '18-34', '35-49', '50-64', '65-79', '80+']
+      - name: total_conditions
+        tests: [not_null]
+
+  - name: dim_organizations
+    description: "Dimension établissement de santé."
+    columns:
+      - name: organization_id
+        tests: [unique, not_null]
+
+  - name: fct_encounters
+    description: "Table de faits. Grain : une consultation ou hospitalisation."
+    columns:
+      - name: encounter_id
+        tests: [unique, not_null]
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_patients')
+                field: patient_id
+      - name: organization_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_organizations')
+                field: organization_id
+      - name: duration_minutes
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
