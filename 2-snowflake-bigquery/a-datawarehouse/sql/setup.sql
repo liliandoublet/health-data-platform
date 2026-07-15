@@ -95,3 +95,13 @@ ALTER USER SVC_DBT    SET RSA_PUBLIC_KEY='{{RSA_PUBLIC_KEY_DBT}}';
 
 GRANT ROLE LOADER      TO USER SVC_LOADER;
 GRANT ROLE TRANSFORMER TO USER SVC_DBT;
+
+-- ------------------------------------------------------------
+-- 6. Droits de TRANSFORMER a l'interieur d'ANALYTICS
+--    USAGE sur la base ne suffit pas : il faut aussi les droits
+--    sur les schemas. FUTURE SCHEMAS couvre ceux que dbt va
+--    creer lui-meme plus tard, sans avoir a repasser ici.
+-- ------------------------------------------------------------
+GRANT ALL ON DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+GRANT ALL ON ALL SCHEMAS    IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+GRANT ALL ON FUTURE SCHEMAS IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
