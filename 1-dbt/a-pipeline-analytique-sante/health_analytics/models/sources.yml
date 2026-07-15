@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: synthea
+    description: "Données patients synthétiques générées par Synthea (MITRE)"
+    meta:
+      external_location: "../../../data/raw/csv/{name}.csv"
+    tables:
+      - name: patients
+      - name: encounters
+      - name: conditions
+      - name: medications
+      - name: observations
+      - name: procedures
+      - name: organizations
+      - name: providers
+      - name: payers
