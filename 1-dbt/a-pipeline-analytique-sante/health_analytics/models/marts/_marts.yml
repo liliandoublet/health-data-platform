@@ -39,8 +39,24 @@ models:
                 to: ref('dim_organizations')
                 field: organization_id
       - name: duration_minutes
+        description: "Durée en minutes. NULL si les horodatages source sont incohérents."
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
+                inclusive: true
+      - name: has_invalid_timestamps
+        description: "Vrai si stopped_at < started_at dans la source. Anomalie Synthea connue, tracée en warn."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [false]
+              config:
+                severity: warn
+      - name: age_at_encounter
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 120
                 inclusive: true
