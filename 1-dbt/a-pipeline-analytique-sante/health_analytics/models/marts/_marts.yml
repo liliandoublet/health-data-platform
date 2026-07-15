@@ -7,6 +7,7 @@ models:
       - name: patient_id
         tests: [unique, not_null]
       - name: age_band
+        description: "Tranche d'âge courante (ou à la date de décès). Voir macro age_band."
         tests:
           - accepted_values:
               arguments:
@@ -59,4 +60,109 @@ models:
               arguments:
                 min_value: 0
                 max_value: 120
+                inclusive: true
+
+  - name: fct_readmissions
+    description: >
+      Séjours hospitaliers (inpatient) avec indicateur de réadmission à 30 jours.
+      Grain : un séjour index par ligne. Exclusions du dénominateur :
+      décès pendant le séjour index, horodatages incohérents,
+      chevauchement avec le séjour suivant.
+    columns:
+      - name: index_stay_id
+        tests: [unique, not_null]
+      - name: patient_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_patients')
+                field: patient_id
+      - name: days_to_readmission
+        description: "NULL si aucun séjour ultérieur ou si chevauchement."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: age_band_at_stay
+        description: "Tranche d'âge à la date d'admission, et non l'âge courant du patient."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['00-17', '18-34', '35-49', '50-64', '65-79', '80+']
+      - name: overlaps_next_stay
+        description: "Séjours qui se chevauchent. Anomalie source, exclue du calcul et tracée en warn."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [false]
+              config:
+                severity: warn
+      - name: is_readmitted_30d
+        description: "Réadmission toutes causes à 30 jours."
+        tests: [not_null]
+      - name: is_readmitted_30d_unplanned
+        description: >
+          Réadmission non programmée à 30 jours. Approximation de la logique CMS
+          via le référentiel seed_encounter_planned_classification.
+        tests: [not_null]
+      - name: is_planned_readmission
+        description: "Vrai si la réadmission relève d'un type d'admission programmé."
+        tests: [not_null]
+      - name: is_eligible_index_stay
+        tests: [not_null]
+
+  - name: mart_organization_kpis
+    description: "Indicateurs de pilotage par établissement de santé."
+    columns:
+      - name: organization_id
+        tests: [unique, not_null]
+      - name: readmission_rate_30d_pct
+        description: "NULL si aucun séjour éligible dans l'établissement."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
+                inclusive: true
+      - name: readmission_rate_30d_unplanned_pct
+        description: "Taux non programmé. Toujours inférieur ou égal au taux toutes causes."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
+                inclusive: true
+      - name: emergency_share_pct
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
+                inclusive: true
+
+  - name: mart_high_utilizers
+    description: >
+      Profil de recours hospitalier par patient. Met en évidence la
+      concentration des séjours sur un petit groupe de gros utilisateurs.
+      Sur l'échantillon Synthea, ce groupe explique l'essentiel du taux
+      de réadmission observé au niveau établissement.
+    columns:
+      - name: patient_id
+        tests: [unique, not_null]
+      - name: inpatient_stays
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                inclusive: true
+      - name: is_high_utilizer
+        tests: [not_null]
+      - name: personal_readmission_rate_pct
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
                 inclusive: true

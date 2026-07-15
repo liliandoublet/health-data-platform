@@ -1,0 +1,19 @@
+version: 2
+
+seeds:
+  - name: seed_encounter_planned_classification
+    description: >
+      Classification programmé / non programmé des types d'admission Synthea.
+      APPROXIMATION : l'algorithme CMS officiel classe sur les procédures
+      réalisées (catégories AHRQ-CCS), non sur le code d'encounter.
+      Synthea ne modélisant pas cette distinction, on approxime par le
+      libellé du type d'admission. Défaut conservateur : non programmé.
+    config:
+      column_types:
+        encounter_code: varchar
+        is_planned: boolean
+    columns:
+      - name: encounter_code
+        tests: [unique, not_null]
+      - name: is_planned
+        tests: [not_null]
