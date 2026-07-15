@@ -157,6 +157,7 @@ indicateur exploitable.
 ---
 
 ## Structure
+
 a-pipeline-analytique-sante/
 ├── pyproject.toml, uv.lock       # Environnement reproductible
 ├── docs/                          # Captures
