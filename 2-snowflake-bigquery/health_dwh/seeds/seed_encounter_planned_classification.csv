@@ -1,0 +1,13 @@
+encounter_code,encounter_label,is_planned,classification_rationale
+56876005,Drug rehabilitation and detoxification,true,Therapie recurrente par nature programmee
+410410006,Screening surveillance,true,Depistage programme a l avance
+310061009,Gynecology service,true,Suivi programme incluant le prenatal
+183495009,Non-urgent orthopedic admission,true,Libelle explicitement non urgent donc electif
+86013001,Periodic reevaluation and management,true,Suivi periodique par definition programme
+185347001,Encounter for problem,false,Motif clinique actif - defaut non programme
+183452005,Encounter Inpatient,false,Code non qualifie - defaut conservateur non programme
+308540004,Inpatient stay,false,Code non qualifie - defaut conservateur non programme
+305408004,Admission to surgical department,false,Chirurgie non qualifiee electif vs urgent indistinguable
+185345009,Encounter for symptom,false,Admission motivee par un symptome - non programme
+32485007,Hospital admission,false,Code non qualifie - defaut conservateur non programme
+305411003,Admission to thoracic surgery department,false,Chirurgie non qualifiee electif vs urgent indistinguable

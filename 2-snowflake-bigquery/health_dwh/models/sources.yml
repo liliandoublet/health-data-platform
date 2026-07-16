@@ -1,0 +1,23 @@
+version: 2
+
+sources:
+  - name: synthea
+    description: "Données patients synthétiques générées par Synthea (MITRE)"
+
+    # Sur DuckDB, la source etait un fichier lu a chaque run
+    # (meta.external_location). Ici elle designe des tables deja
+    # chargees dans Snowflake par sql/load_03_all.sh : l'extraction
+    # et le chargement ont quitte dbt.
+    database: HEALTH_RAW
+    schema: SYNTHEA
+
+    tables:
+      - name: patients
+      - name: encounters
+      - name: conditions
+      - name: medications
+      - name: observations
+      - name: procedures
+      - name: organizations
+      - name: providers
+      - name: payers
