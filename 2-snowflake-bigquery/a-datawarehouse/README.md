@@ -169,17 +169,25 @@ synthétiques.
 
 ## 9. Coûts
 
-<!-- À compléter une fois le job de déploiement exécuté. Relevé via ACCOUNTADMIN :
-     SELECT warehouse_name, ROUND(SUM(credits_used), 4) AS credits
-     FROM SNOWFLAKE.ACCOUNT_USAGE.WAREHOUSE_METERING_HISTORY
-     WHERE warehouse_name = 'WH_HEALTH_XS'
-     GROUP BY 1;
--->
+Mesuré via `INFORMATION_SCHEMA.QUERY_HISTORY_BY_WAREHOUSE` après un run complet
+du job de déploiement (`dbt seed` + `dbt build`) :
 
-Warehouse XSMALL, `AUTO_SUSPEND = 60s`. Un `dbt build` complet
-(chargement + 14 modèles + 59 tests) consomme _[à relever]_ crédits, soit
-~_[à relever]_ $. Le trial (30 jours / 400 $) est contraint par le **temps**,
-pas par les crédits : un warehouse XS ne permet pas d'épuiser 400 $ en 30 jours.
+| Métrique | Valeur |
+|----------|--------|
+| Requêtes exécutées | 100 |
+| Temps de calcul cumulé | 5,7 s |
+| Crédits estimés / run | ~0,05 (minimum de facturation 60 s/réveil dominant) |
+| Coût estimé / run | ~0,15 $ (Enterprise, eu-west-3, ~3 $/crédit) |
+
+**Lecture** — le pipeline complet (chargement + 14 modèles + 59 tests) mobilise le
+warehouse moins de 6 secondes. Le coût réel est plafonné par le minimum de
+facturation de 60 s par réveil du warehouse, pas par le temps de calcul.
+
+Conséquence sur le trial (30 jours / 400 $) : il est contraint par le **temps**,
+jamais par les crédits. À ~0,15 $ le run, il faudrait plusieurs milliers
+d'exécutions pour approcher le plafond budgétaire — un warehouse XS avec
+`AUTO_SUSPEND = 60s` rend le budget quasi impossible à épuiser. La bonne
+optimisation porte donc sur le calendrier, pas sur la consommation.
 
 ---
 
