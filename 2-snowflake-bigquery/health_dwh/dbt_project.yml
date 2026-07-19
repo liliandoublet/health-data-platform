@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'health_analytics'
+name: 'health_dwh'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
@@ -26,7 +26,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 models:
-  health_analytics:
+  health_dwh:
     staging:
       +materialized: view
     intermediate:
