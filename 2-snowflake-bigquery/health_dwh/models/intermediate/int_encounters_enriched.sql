@@ -1,17 +1,10 @@
 with encounters as (
-
     select * from {{ ref('stg_encounters') }}
-
 ),
-
 patients as (
-
     select * from {{ ref('stg_patients') }}
-
 ),
-
 joined as (
-
     select
         e.encounter_id,
         e.patient_id,
@@ -35,12 +28,12 @@ joined as (
         -- et on trace le cas via has_invalid_timestamps.
         case
             when e.stopped_at >= e.started_at
-                then date_diff('minute', e.started_at, e.stopped_at)
+                then {{ dbt.datediff('e.started_at', 'e.stopped_at', 'minute') }}
         end as duration_minutes,
 
         e.stopped_at < e.started_at as has_invalid_timestamps,
 
-        date_diff('year', p.birth_date, cast(e.started_at as date)) as age_at_encounter,
+        {{ dbt.datediff('p.birth_date', 'cast(e.started_at as date)', 'year') }} as age_at_encounter,
 
         p.gender,
         p.race,
@@ -49,7 +42,5 @@ joined as (
 
     from encounters e
     inner join patients p on e.patient_id = p.patient_id
-
 )
-
 select * from joined
