@@ -3,7 +3,7 @@ with source as (
 ),
 renamed as (
     select
-        id                           as organization_id,
+        "Id"                         as organization_id,
         name                         as organization_name,
         city,
         state,

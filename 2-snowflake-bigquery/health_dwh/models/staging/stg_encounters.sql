@@ -3,7 +3,7 @@ with source as (
 ),
 renamed as (
     select
-        id                                 as encounter_id,
+        "Id"                               as encounter_id,
         patient                            as patient_id,
         organization                       as organization_id,
         provider                           as provider_id,

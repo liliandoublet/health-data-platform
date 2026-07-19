@@ -3,7 +3,7 @@ with source as (
 ),
 renamed as (
     select
-        id                                 as patient_id,
+        "Id"                               as patient_id,
         cast(birthdate as date)            as birth_date,
         cast(deathdate as date)            as death_date,
         deathdate is not null              as is_deceased,
