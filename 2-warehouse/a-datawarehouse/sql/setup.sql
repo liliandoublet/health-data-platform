@@ -105,3 +105,20 @@ GRANT ROLE TRANSFORMER TO USER SVC_DBT;
 GRANT ALL ON DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
 GRANT ALL ON ALL SCHEMAS    IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
 GRANT ALL ON FUTURE SCHEMAS IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+
+-- ------------------------------------------------------------
+-- 7. Near-real-time (2b) : Dynamic Tables + Streams
+--    TRANSFORMER construit DTs et streams DANS ANALYTICS.
+--    CREATE DYNAMIC TABLE / CREATE STREAM ne sont pas toujours
+--    inclus retroactivement dans un GRANT ALL anterieur : on les
+--    pose en clair (least-privilege explicite), et sur ALL SCHEMAS
+--    pour couvrir les schemas dbt DEJA crees, pas seulement FUTURE.
+--    Le change tracking sur RAW n'est PAS ici : il exige l'OWNERSHIP
+--    (donc LOADER) et les tables RAW n'existent pas encore quand
+--    setup.sql tourne sur un compte neuf. Il est active au
+--    chargement -> sql/load_04_change_tracking.sql.
+-- ------------------------------------------------------------
+GRANT CREATE DYNAMIC TABLE ON ALL SCHEMAS    IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+GRANT CREATE DYNAMIC TABLE ON FUTURE SCHEMAS IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+GRANT CREATE STREAM        ON ALL SCHEMAS    IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
+GRANT CREATE STREAM        ON FUTURE SCHEMAS IN DATABASE HEALTH_ANALYTICS TO ROLE TRANSFORMER;
