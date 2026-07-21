@@ -2,12 +2,20 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
+<<<<<<< HEAD
 name: 'my_new_project'
 version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
 profile: 'default'
+=======
+name: 'health_dwh'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'health_dwh'
+>>>>>>> dca86ec3ffad2c0fb2fc5b47de2b60f02932ce2d
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -19,7 +27,10 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
+<<<<<<< HEAD
 target-path: "target"  # directory which will store compiled SQL files
+=======
+>>>>>>> dca86ec3ffad2c0fb2fc5b47de2b60f02932ce2d
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
@@ -27,6 +38,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
+<<<<<<< HEAD
 
 # In dbt, the default materialization for a model is a view. This means, when you run 
 # dbt run or dbt build, all of your models will be built as a view in your data platform. 
@@ -40,3 +52,13 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+=======
+models:
+  health_dwh:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
+>>>>>>> dca86ec3ffad2c0fb2fc5b47de2b60f02932ce2d

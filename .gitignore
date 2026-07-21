@@ -7,12 +7,14 @@ target/
 dbt_packages/
 logs/
 data/raw/
-1-dbt/a-pipeline-analytique-sante/health_analytics/dev.duckdb
-1-dbt/a-pipeline-analytique-sante/health_analytics/dev.duckdb
-1-dbt/a-pipeline-analytique-sante/health_analytics/dbt_packages/
+1-duckdb/a-pipeline-analytique-sante/health_analytics/dev.duckdb
+1-duckdb/a-pipeline-analytique-sante/health_analytics/dev.duckdb
+1-duckdb/a-pipeline-analytique-sante/health_analytics/dbt_packages/
 
 # Clés Snowflake — ne doivent JAMAIS être commitées
 *.p8
 *.pem
 .snowflake/
 setup.local.sql
+.claude/settings.local.json
+venv/

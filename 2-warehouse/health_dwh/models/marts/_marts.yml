@@ -92,13 +92,7 @@ models:
               arguments:
                 values: ['00-17', '18-34', '35-49', '50-64', '65-79', '80+']
       - name: overlaps_next_stay
-        description: "Séjours qui se chevauchent. Anomalie source, exclue du calcul et tracée en warn."
-        tests:
-          - accepted_values:
-              arguments:
-                values: [false]
-              config:
-                severity: warn
+        description: "Séjours qui se chevauchent. Anomalie source, exclue du calcul. Volume suivi par un test singulier (assert_overlap_rate_within_bounds)." 
       - name: is_readmitted_30d
         description: "Réadmission toutes causes à 30 jours."
         tests: [not_null]

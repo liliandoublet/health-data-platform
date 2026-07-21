@@ -45,7 +45,7 @@ joined as (
 
         case
             when s.next_admitted_at >= s.discharged_at
-                then date_diff('day', s.discharged_at, s.next_admitted_at)
+                then {{ dbt.datediff('s.discharged_at', 's.next_admitted_at', 'day') }}
         end as days_to_readmission,
 
         p.gender,
